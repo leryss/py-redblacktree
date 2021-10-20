@@ -55,10 +55,10 @@ class bstnode:
         self.val = value
         self.parent = self.left = self.right = None
 
-    def __repr__(self):
+    def __repr__(self, width_ratio=16, max_depth=6):
         depth = self.depth()
-        height = min(depth, 6)
-        width = 16 * depth
+        height = min(depth, max_depth)
+        width = width_ratio * depth
         canvas = [[' ' for i in range(width)] for j in range(height)]
 
         def write_on_canvas(x, y, chars):
@@ -169,6 +169,9 @@ class bst:
 
     def inorder(self):
         return self.root.inorder() if self.root else empty_generator()
+
+    def min_key(self):
+        return self.min_so_far#next(self.root.inorder()) if self.root else None
 
     def _find_node(self, node, key):
         if node.key == key:
@@ -302,11 +305,14 @@ class bst:
         x.parent = y
         y.left = x
 
-    def __repr__(self):
+    def __repr__(self, width_ratio=16, max_depth=6):
         if not self.root:
             return 'Empty Tree'
 
-        return repr(self.root)
+        return self.root.__repr__(width_ratio, max_depth)
+
+    def to_str(self, width_ratio=16, max_depth=6):
+        return self.__repr__(width_ratio, max_depth)
 
 class rbnode(bstnode):
     colored: bool
@@ -748,6 +754,17 @@ def test_len():
         tree.remove(i)
         assert len(tree) == i, 'Invalid tree length after removal'
 
+def test_min():
+    nums = [randint(0, 100) for i in range(20)]
+    tree = rbtree(nums)
+    assert tree.min_key() == min(nums), 'Invalid result from min() function'
+
+    tree[-100] = None
+    assert tree.min_key() == -100, 'Invalid result from min() function after insert'
+
+    tree = rbtree()
+    assert tree.min_key() == None, 'min() of empty tree should return None'
+
 def run_rbtree_tests():
     tests = {
         ('Test left-left, right-right insertion', test_ll_rr_insertions),
@@ -761,7 +778,8 @@ def run_rbtree_tests():
         ('Test Valid RBTree after removes      ', test_still_valid_rbtree_after_remove),
         ('Test Keys removed correctly          ', test_keys_correctly_removed),
         ('Test Remove edge cases               ', test_remove_edge_cases),
-        ('Test Tree __len__                    ', test_len)
+        ('Test Tree __len__                    ', test_len),
+        ('Test Tree min()                      ', test_min)
     }
 
     for test_name, test in tests:
@@ -772,4 +790,5 @@ def run_rbtree_tests():
         except AssertionError as e:
             print(f' Failed => {e}')
 
-#run_rbtree_tests()
+if __name__ == '__main__':
+    run_rbtree_tests()
