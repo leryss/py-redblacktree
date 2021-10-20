@@ -323,8 +323,7 @@ class rbnode(bstnode):
 
     def __str__(self):
         str_val = ':' + str(self.val) if self.val != None else ''
-        return f'{self.key}{str_val if len(str_val) < 10 else str_val[:8] + ".."}'
-        #return str(self.key) + ('(b)' if self.colored else '(r)')
+        return f'{self.key}{str_val}'
 
 class rbtree(bst):
     left    = 0
