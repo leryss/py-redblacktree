@@ -170,8 +170,8 @@ class bst:
     def inorder(self):
         return self.root.inorder() if self.root else empty_generator()
 
-    def min_key(self):
-        return self.min_so_far#next(self.root.inorder()) if self.root else None
+    def min(self):
+        return next(self.root.inorder()) if self.root else None
 
     def _find_node(self, node, key):
         if node.key == key:
@@ -757,13 +757,13 @@ def test_len():
 def test_min():
     nums = [randint(0, 100) for i in range(20)]
     tree = rbtree(nums)
-    assert tree.min_key() == min(nums), 'Invalid result from min() function'
+    assert tree.min()[0] == min(nums), 'Invalid result from min() function'
 
     tree[-100] = None
-    assert tree.min_key() == -100, 'Invalid result from min() function after insert'
+    assert tree.min()[0] == -100, 'Invalid result from min() function after insert'
 
     tree = rbtree()
-    assert tree.min_key() == None, 'min() of empty tree should return None'
+    assert tree.min() == None, 'min() of empty tree should return None'
 
 def run_rbtree_tests():
     tests = {
