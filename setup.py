@@ -6,7 +6,7 @@ long_description = (this_directory / "README.md").read_text('utf-8')
 
 setup(
     name='redblacktree',
-    version='1.0.2',    
+    version='1.0.3',    
     description='A pure python3 red black tree implementation',
 	long_description=long_description,
     long_description_content_type='text/markdown',
