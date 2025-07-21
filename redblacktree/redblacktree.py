@@ -49,6 +49,17 @@ class bstnode:
         if self.right:
             for kv in self.right.inorder():
                 yield kv
+                
+    def inreverseorder(self):
+        if self.right:
+            for kv in self.right.inreverseorder():
+                yield kv
+
+        yield (self.key, self.val)
+
+        if self.left:
+            for kv in self.left.inreverseorder():
+                yield kv
 
     def __init__(self, key, value):
         self.key = key
@@ -137,6 +148,9 @@ class bst:
 
     def __iter__(self):
         return self.inorder()
+       
+    def __reversed__(self):
+        return self.inreverseorder()
 
     def __eq__(self, other):
         def equal(node1, node2):
@@ -169,6 +183,9 @@ class bst:
 
     def inorder(self):
         return self.root.inorder() if self.root else empty_generator()
+        
+    def inreverseorder(self):
+        return self.root.inreverseorder() if self.root else empty_generator()
 
     def min(self):
         return next(self.root.inorder()) if self.root else None
@@ -699,9 +716,20 @@ def test_rbtree_equals():
 
 def test_traversals():
 
-    nums = {i: i + 1 for i in range(50)}
-    for k, v in rbtree(nums):
-        assert v == nums[k], 'Invalid inorder traversal'
+    N = 50
+    nums = {i: i + 1 for i in range(N)}
+    tree = rbtree(nums)
+    
+    expected_inorder = [(i, i + 1) for i in range(N)]
+    expected_inreverseorder = list(reversed(expected_inorder))
+    
+    actual_inorder = [(k, v) for k, v in rbtree(nums)]
+    actual_inreverseorder = [(k, v) for k, v in reversed(rbtree(nums))]
+    
+    for i in range(N):
+        assert expected_inorder[i] == actual_inorder[i], 'Invalid inorder traversal at ' + i
+        assert expected_inreverseorder[i] == actual_inreverseorder[i], 'Invalid inreverseorder traversal at ' + i
+    
 
 def test_still_valid_rbtree_after_remove():
 
@@ -791,3 +819,4 @@ def run_rbtree_tests():
 
 if __name__ == '__main__':
     run_rbtree_tests()
+    

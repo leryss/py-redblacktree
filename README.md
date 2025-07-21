@@ -49,4 +49,8 @@ tree[:5]   # All (key, value) pairs for keys <= 5
 # Simple iteration:
 for k, v in tree:
     print(k, v)
+
+# Iterate in reverse order
+for k, v in reversed(tree):
+    print(k, v)
 ```
